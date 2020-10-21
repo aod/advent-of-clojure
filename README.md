@@ -1,5 +1,7 @@
 # Advent of Clojure
 
+![Clojure CI](https://github.com/aod/advent-of-clojure/workflows/Clojure%20CI/badge.svg)
+
 Advent of Code solutions in Clojure.
 
 ## Usage
