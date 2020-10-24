@@ -1,6 +1,5 @@
 (ns xyz.oktaydinler.advent.edition2015.day05
-  (:require [clojure.string :as str])
-  (:import (java.util.regex Pattern)))
+  (:require [clojure.string :as str]))
 
 (defn has-vowels [string]
   (let [vowels (set "aeiou")]
