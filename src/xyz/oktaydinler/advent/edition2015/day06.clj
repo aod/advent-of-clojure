@@ -1,7 +1,7 @@
 (ns xyz.oktaydinler.advent.edition2015.day06
   (:require [clojure.string :as str]))
 
-(defn xy-ranges [x1 y1 x2 y2]
+(defn xy-ranges [^long x1 ^long y1 ^long x2 ^long y2]
   (let [xs (range x1 (+ 1 x2))
         ys (range y1 (+ 1 y2))]
     (for [x xs, y ys] [x y])))
@@ -14,8 +14,8 @@
          (apply xy-ranges (map #(Integer/parseUnsignedInt %)
                                (subvec match 2)))])))
 
-(def grid-size 1000000)
-(defn xy-to-idx [[x y]] (+ x (* y grid-size)))
+(def ^:const grid-size 1000000)
+(defn xy-to-idx [[^long x ^long y]] (+ x (* y grid-size)))
 
 (defn apply-action [action default grid xy]
   (let [idx    (xy-to-idx xy)
