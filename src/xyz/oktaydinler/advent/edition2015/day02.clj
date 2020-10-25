@@ -7,13 +7,13 @@
   vector."
   (into [] (map #(Integer/parseUnsignedInt %) (str/split present #"x"))))
 
-(defn ^long wrapping-paper
-  [^longs present]
+(defn wrapping-paper
+  [present]
   "Calculates the amount of square feet of wrapping paper that is needed for the
   given present."
-  (let [[^long l ^long w ^long h] present
-        [^long lw ^long wh ^long hl] (map * [w h l] present)]
-    (+ (* 2 (+ lw wh hl)) (^long apply min [lw wh hl]))))
+  (let [[l w h] present
+        [lw wh hl] (map * [w h l] present)]
+    (+ (* 2 (+ lw wh hl)) (apply min [lw wh hl]))))
 
 (defn part1
   [presents]
@@ -25,12 +25,12 @@
          (map (comp wrapping-paper parse-dimensions))
          (reduce +))))
 
-(defn ^long ribbon
-  [^longs present]
+(defn ribbon
+  [present]
   "Calculates the amount of feet of ribbon to wrap the present and bow for the
   given present."
-  (let [[^long l ^long w ^long h] present]
-    (+ (* l w h) (* 2 (- (+ l w h) (^long apply max [l w h]))))))
+  (let [[l w h] present]
+    (+ (* l w h) (* 2 (- (+ l w h) (apply max [l w h]))))))
 
 (defn part2
   [presents]
