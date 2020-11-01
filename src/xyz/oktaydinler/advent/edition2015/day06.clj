@@ -1,7 +1,7 @@
 (ns xyz.oktaydinler.advent.edition2015.day06
   (:require [clojure.string :as str]))
 
-(defn xy-ranges [x1 y1 x2 y2]
+(defn xy-ranges [^long x1 ^long y1 ^long x2 ^long y2]
   (let [xs (range x1 (+ 1 x2))
         ys (range y1 (+ 1 y2))]
     (for [x xs, y ys] [x y])))
@@ -14,25 +14,23 @@
          (apply xy-ranges (map #(Integer/parseUnsignedInt %)
                                (subvec match 2)))])))
 
-(def grid-size 1000000)
-(defn xy-to-idx [[x y]] (+ x (* y grid-size)))
+(def ^:const grid-size 1000)
+(defn xy-to-idx [[^long x ^long y]] (+ x (* y grid-size)))
 
-(defn apply-action [action default grid xy]
-  (let [idx    (xy-to-idx xy)
-        update (partial assoc! grid idx)]
-    (update (action (get grid idx default)))))
+(defn apply-action [action grid xy]
+  (let [idx    (xy-to-idx xy)]
+    (assoc! grid idx (action (grid idx)))))
 
-(defn apply-intermediate [default grid intermediate]
+(defn apply-intermediate [grid intermediate]
   (let [[action coords] intermediate]
-    (reduce (comp conj! (partial apply-action action default))
+    (reduce (comp conj! (partial apply-action action))
             grid coords)))
 
-(defn solve [actions f default input]
-  (let [grid          (transient {})
+(defn solve [actions f type input]
+  (let [grid          (transient (vec (make-array type (* grid-size grid-size))))
         intermediates (map (partial intermediate actions)
                            (str/split-lines input))]
-    (f (vals (persistent! (reduce (partial apply-intermediate default)
-                                  grid intermediates))))))
+    (f (persistent! (reduce apply-intermediate grid intermediates)))))
 
 (def lit-actions
   {:turn-on  (constantly true)
@@ -41,7 +39,8 @@
 
 (defn part1 [input]
   (solve lit-actions
-         (comp count (partial filter true?)) false
+         (comp count (partial filter true?))
+         Boolean/TYPE
          input))
 
 (def brightness-actions
@@ -51,5 +50,6 @@
 
 (defn part2 [input]
   (solve brightness-actions
-         (partial reduce +) 0
+         (partial reduce +)
+         Long/TYPE
          input))
